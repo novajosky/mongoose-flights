@@ -1,24 +1,27 @@
 <%- include('../partials/header') %>
 
 <section id="show-page">
-  <div>Airline: </div>
-  <div><%= flight.airline %></div><br>
-  <div>Airport: </div>
-  <div><%= flight.airport %></div><br>
-  <div>Flight No: </div>
-  <div><%= flight.flightNo %></div><br>
-  <div>Departs: </div>
-  <div><%= flight.departs %></div><br>
-  <div>Arrives:</div>
-  <% flight.destinations.forEach(function(d) { %>
-    <tr>
-        <td><%= d.airport %></td>
-        <td><%= d.arrival %></td>
-    </tr>
+    <h3>Flight Info</h3>
+    <div>Airline: <%= flight.airline %></div>
+    <div>Departure Airport: <%= flight.airport %></div>
+    <div>Flight No: <%= flight.flightNo %></div>
+    <div>Departs: <%= flight.departs %></div>
+    <% flight.destinations.forEach(function(d) { %>
+    <div>Destination Airport: <%= d.airport %></div>
+    <div>Arrival Time: <%= d.arrival %></div>
     <% }); %>
 </section>
+<h3>Ticket Info</h3>
+<% if (tickets.length) { %>
+    <% tickets.forEach(function(t) { %>
+        <div>Seat Number: <%= t.seat %></div>
+        <div>Price: <%= t.price %></div>
+    <% }); %>
+<% } else { %>
+        <div>No Tickets Yet</div>
+    <% } %>
 
-<h2>ADD YOUR DESTINATION</h2>
+<h3>Add Your Destination</h3>
 <form action="/flights/<%= flight._id %>/destinations" method="POST">
     <label>Destination Airport:
         <select name="airport">
@@ -32,7 +35,17 @@
     <label>Arrival Date:
         <input type="datetime-local" name="arrival">
     </label><br>
-    <input type="submit" value="Add Arrival Information">
+    <input type="submit" value="Add Arrival Information"><br>
+</form>
+    <h2>Add Ticket Info</h2>
+    <form action="/flights/<%= flight._id %>/tickets" method="POST">
+        <label>Seat: Please choose: A-F followed by 1-99
+            <input name="seat" required pattern="[A-F][1-9]\d?">
+        </label><br>
+        <label>Price:
+            <input type="number" name="price">
+        </label><br>  
+    <input type='submit' value="Add New Ticket">
 </form>
 
 <%- include('../partials/footer') %>
